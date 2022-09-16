@@ -4,7 +4,7 @@ let doneList = [];
 const todoForm = document.querySelector('.to-do-form');
 const inputText = document.querySelector('input');
 const todos = document.querySelector('.to-do-list');
-const Dones = document.querySelector('.done-list');
+const dones = document.querySelector('.done-list');
 const closeButton = document.querySelector('.close-button');
 const todoCountText = document.querySelector('.to-do-count');
 const doneCountText = document.querySelector('.done-count');
@@ -23,7 +23,9 @@ const saveInTodoLocalStorage = (todoInfo) => {
     localStorage.setItem('todo-list', JSON.stringify(todoInfo));
 };
 
-const changeToDone = () => {};
+const saveInDoneLocalStorage = (todoInfo) => {
+    localStorage.setItem('done-list', JSON.stringify(todoInfo));
+};
 
 const createTodo = (todoText) => {
     const todoId = new Date().getTime();
@@ -40,7 +42,7 @@ const createTodo = (todoText) => {
     <span>${todoText}</span> 
     <img 
         class="close-button-${todoId}" 
-        onclick="onClickCloseButton(${todoId})" 
+        onclick="onClickTodoCloseButton(${todoId})" 
         src='../vanilla-todo-16th/close_button.svg'  
     />
     <img
@@ -55,7 +57,7 @@ const createTodo = (todoText) => {
     inputText.value = '';
 };
 
-const onClickCloseButton = (todoId) => {
+const onClickTodoCloseButton = (todoId) => {
     let closeButton = document.querySelector(`.close-button-${todoId}`);
     if (closeButton.parentElement.className == `content to-do-content-${todoId}`) {
         todoList = todoList.filter((todoInfo) => todoInfo.todoId !== todoId);
@@ -65,8 +67,19 @@ const onClickCloseButton = (todoId) => {
     todoCount();
 };
 
+const onClickDoneCloseButton = (todoId) => {
+    let closeButton = document.querySelector(`.close-button-${todoId}`);
+    if (closeButton.parentElement.className == `content done-content-${todoId}`) {
+        doneList = doneList.filter((todoInfo) => todoInfo.todoId !== todoId);
+        saveInDoneLocalStorage(doneList);
+        closeButton.parentElement.remove();
+    }
+    doneCount();
+};
+
 const onClickCheckButton = (todoId) => {
     let todoText;
+    let todoInfo;
     let closeButton = document.querySelector(`.close-button-${todoId}`);
     let checkButton = document.querySelector(`.check-button-${todoId}`);
     if (checkButton.parentElement.className == `content to-do-content-${todoId}`) {
@@ -75,7 +88,7 @@ const onClickCheckButton = (todoId) => {
                 todoText = todoInfo.todoText;
             }
         });
-        const todoInfo = {
+        todoInfo = {
             todoId: todoId,
             todoText: todoText,
         };
@@ -86,6 +99,18 @@ const onClickCheckButton = (todoId) => {
         todoCount();
         doneCount();
     }
+    const doneContent = document.createElement('div');
+    doneContent.className = `content done-content-${todoId}`;
+    doneContent.innerHTML = `
+    <span>${todoInfo.todoText}</span>
+    <img
+        class="close-button-${todoId}"
+        onclick="onClickDoneCloseButton(${todoId})"
+        src='../vanilla-todo-16th/close_button.svg'
+    />
+    `;
+    dones.appendChild(doneContent);
+    todoCount();
 };
 
 const todoCount = () => {
