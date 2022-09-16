@@ -1,35 +1,31 @@
-const todoList = [];
-const doneList = [];
+let todoList = [];
+let doneList = [];
 
 const todoForm = document.querySelector('.to-do-form');
 const inputText = document.querySelector('input');
 const todos = document.querySelector('.to-do-list');
 const Dones = document.querySelector('.done-list');
 const closeButton = document.querySelector('.close-button');
-
-const enterTime = (e) => {
-    if (e.keyCode == 13) {
-        e.preventDefault();
-        console.log(e.keyCode);
-    }
-};
+const todoCountText = document.querySelector('.to-do-count');
+const doneCountText = document.querySelector('.done-count');
 
 const addTodoList = (e) => {
     e.preventDefault();
     const todoText = inputText.value;
     if (todoText) {
         createTodo(todoText);
+    } else {
+        window.alert('텍스트를 입력해 주세요.');
     }
-    window.alert('텍스트를 입력해 주세요.');
 };
 
-const saveOnTodoLocalStorage = (todoInfo) => {
+const saveInTodoLocalStorage = (todoInfo) => {
     localStorage.setItem('todo-list', JSON.stringify(todoInfo));
 };
 
 const changeToDone = () => {};
 
-const test = (todoText) => {
+const createTodo = (todoText) => {
     const todoId = new Date().getTime();
     const todoInfo = {
         todoId: todoId,
@@ -47,8 +43,9 @@ const test = (todoText) => {
     />
     `;
     todos.appendChild(todoContent);
-    todoList.push(...todoList, todoInfo);
-    saveOnTodoLocalStorage(todoList);
+    todoList.push(todoInfo);
+    saveInTodoLocalStorage(todoList);
+    todoCount();
 
     inputText.value = '';
 };
@@ -56,34 +53,21 @@ const test = (todoText) => {
 const onClickCloseButton = (todoId) => {
     let closeButton = document.querySelector(`.close-button-${todoId}`);
     if (closeButton.parentElement.className == `to-do-content-${todoId}`) {
-        console.log(todoId);
+        todoList = todoList.filter((todoInfo) => todoInfo.todoId !== todoId);
+        closeButton.parentElement.remove();
     }
+    todoCount();
 };
 
-const paintToDo = (toDo) => {
-    const div = document.createElement('div');
-    div.classList.add(`to-do-content-${num}`);
-    div.innerHTML = `
-    <span class=${toDo}>${toDo}</span> 
-    <img 
-        class="close-button" 
-        onclick="onClickCloseButton()" 
-        src='../vanilla-todo-16th/close_button.svg'  
-    />
-    `;
-    todos.appendChild(div);
-    num += 1;
+const todoCount = () => {
+    todoCountText.innerHTML = `<span> (${todoList.length})</span>`;
 };
 
-const createToDo = (event) => {
-    event.preventDefault();
-    const toDo = inputText.value;
-    test(toDo);
-    inputText.value = '';
-    // enterTime();
+const doneCount = () => {
+    doneCountText.innerHTML = `<span> (${doneList.length})</span>`;
 };
 
 const init = () => {
-    todoForm.addEventListener('submit', createToDo);
+    todoForm.addEventListener('submit', addTodoList);
 };
 init();

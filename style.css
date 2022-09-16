@@ -67,6 +67,7 @@ body {
   overflow-y: scroll;
   border: 1px solid red;
   padding: 8px;
+  border-radius: 4px;
 }
 
 .done-list {
@@ -77,6 +78,7 @@ body {
   overflow-y: scroll;
   border: 1px solid aqua;
   padding: 8px;
+  border-radius: 4px;
 }
 
 .close-button {
