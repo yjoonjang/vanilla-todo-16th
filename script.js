@@ -31,9 +31,11 @@ const createTodo = (todoText) => {
         todoId: todoId,
         todoText: todoText,
     };
-    const todoContent = document.createElement('div');
+    todoList.push(todoInfo);
+    saveInTodoLocalStorage(todoList);
 
-    todoContent.className = `to-do-content-${todoId}`;
+    const todoContent = document.createElement('div');
+    todoContent.className = `content to-do-content-${todoId}`;
     todoContent.innerHTML = `
     <span>${todoText}</span> 
     <img 
@@ -41,10 +43,13 @@ const createTodo = (todoText) => {
         onclick="onClickCloseButton(${todoId})" 
         src='../vanilla-todo-16th/close_button.svg'  
     />
+    <img
+        class="check-button-${todoId}"
+        onclick="onClickCheckButton(${todoId})"
+        src='../vanilla-todo-16th/Check.svg'
+    />
     `;
     todos.appendChild(todoContent);
-    todoList.push(todoInfo);
-    saveInTodoLocalStorage(todoList);
     todoCount();
 
     inputText.value = '';
@@ -52,11 +57,35 @@ const createTodo = (todoText) => {
 
 const onClickCloseButton = (todoId) => {
     let closeButton = document.querySelector(`.close-button-${todoId}`);
-    if (closeButton.parentElement.className == `to-do-content-${todoId}`) {
+    if (closeButton.parentElement.className == `content to-do-content-${todoId}`) {
         todoList = todoList.filter((todoInfo) => todoInfo.todoId !== todoId);
+        saveInTodoLocalStorage(todoList);
         closeButton.parentElement.remove();
     }
     todoCount();
+};
+
+const onClickCheckButton = (todoId) => {
+    let todoText;
+    let closeButton = document.querySelector(`.close-button-${todoId}`);
+    let checkButton = document.querySelector(`.check-button-${todoId}`);
+    if (checkButton.parentElement.className == `content to-do-content-${todoId}`) {
+        todoList.map((todoInfo) => {
+            if (todoInfo.todoId == todoId) {
+                todoText = todoInfo.todoText;
+            }
+        });
+        const todoInfo = {
+            todoId: todoId,
+            todoText: todoText,
+        };
+        doneList.push(todoInfo);
+        todoList = todoList.filter((todoInfo) => todoInfo.todoId !== todoId);
+        saveInTodoLocalStorage(todoList);
+        closeButton.parentElement.remove();
+        todoCount();
+        doneCount();
+    }
 };
 
 const todoCount = () => {
