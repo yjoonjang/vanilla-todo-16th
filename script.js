@@ -5,7 +5,6 @@ const todoForm = document.querySelector('.to-do-form');
 const inputText = document.querySelector('input');
 const todos = document.querySelector('.to-do-list');
 const dones = document.querySelector('.done-list');
-const closeButton = document.querySelector('.close-button');
 const todoCountText = document.querySelector('.to-do-count');
 const doneCountText = document.querySelector('.done-count');
 
@@ -96,13 +95,14 @@ const onClickCheckButton = (todoId) => {
         todoList = todoList.filter((todoInfo) => todoInfo.todoId !== todoId);
         saveInTodoLocalStorage(todoList);
         closeButton.parentElement.remove();
+        saveInDoneLocalStorage(doneList);
         todoCount();
         doneCount();
     }
     const doneContent = document.createElement('div');
     doneContent.className = `content done-content-${todoId}`;
     doneContent.innerHTML = `
-    <span>${todoInfo.todoText}</span>
+    <span class="done-text">${todoInfo.todoText}</span>
     <img
         class="close-button-${todoId}"
         onclick="onClickDoneCloseButton(${todoId})"
