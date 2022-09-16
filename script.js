@@ -47,9 +47,9 @@ const test = (todoText) => {
     />
     `;
     todos.appendChild(todoContent);
-    saveOnTodoLocalStorage(todoInfo);
     todoList.push(...todoList, todoInfo);
-    todos.appendChild(todoContent);
+    saveOnTodoLocalStorage(todoList);
+
     inputText.value = '';
 };
 
