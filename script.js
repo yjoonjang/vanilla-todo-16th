@@ -8,14 +8,6 @@ const dones = document.querySelector('.done-list');
 const todoCountText = document.querySelector('.to-do-count');
 const doneCountText = document.querySelector('.done-count');
 
-const todoCount = () => {
-    todoCountText.innerHTML = `<span> (${todoList.length})</span>`;
-};
-
-const doneCount = () => {
-    doneCountText.innerHTML = `<span> (${doneList.length})</span>`;
-};
-
 const addTodoList = (e) => {
     e.preventDefault();
     const todoText = inputText.value;
@@ -36,6 +28,14 @@ const saveInDoneLocalStorage = (todoInfo) => {
 
 const getDoneFromLocalStorage = () => {
     localStorage.getItem('done-list');
+};
+
+const todoCount = () => {
+    todoCountText.innerHTML = `<span> (${todoList.length})</span>`;
+};
+
+const doneCount = () => {
+    doneCountText.innerHTML = `<span> (${doneList.length})</span>`;
 };
 
 const drawTodo = (todoInfo) => {
@@ -59,15 +59,6 @@ const drawTodo = (todoInfo) => {
     `;
     todos.appendChild(todoContent);
 };
-
-const todoItemsInLocalStorage = JSON.parse(localStorage.getItem('todo-list'));
-if (todoItemsInLocalStorage) {
-    todoItemsInLocalStorage.forEach((todoInfo) => {
-        drawTodo(todoInfo);
-        todoList.push(todoInfo);
-    });
-    todoCount();
-}
 
 const createTodo = (todoText) => {
     const todoId = new Date().getTime();
@@ -121,6 +112,15 @@ const drawDone = (todoInfo) => {
     `;
     dones.appendChild(doneContent);
 };
+
+const todoItemsInLocalStorage = JSON.parse(localStorage.getItem('todo-list'));
+if (todoItemsInLocalStorage) {
+    todoItemsInLocalStorage.forEach((todoInfo) => {
+        drawTodo(todoInfo);
+        todoList.push(todoInfo);
+    });
+    todoCount();
+}
 
 const doneItemsInLocalStorage = JSON.parse(localStorage.getItem('done-list'));
 if (doneItemsInLocalStorage) {
