@@ -1,0 +1,110 @@
+@font-face {
+  font-family: 'SCoreMontserrat';
+  src: url('../vanilla-todo-16th/font/SCDream-Regular.woff') format("woff");
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SCoreMontserrat';
+  src: url('../vanilla-todo-16th/font/SCDream-Bold.woff') format("woff");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SCoreMontserrat';
+  src: url('../vanilla-todo-16th/font/Montserrat-Regular.woff') format("woff");
+  font-weight: 200;
+  unicode-range: U+0041-005A, U+0061-007A, U+0030-0039;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SCoreMontserrat';
+  src: url('../vanilla-todo-16th/font/Montserrat-Bold.woff') format("woff");
+  font-weight: 600;
+  unicode-range: U+0041-005A, U+0061-007A, U+0030-0039;
+  font-style: normal;
+}
+
+body {
+  font-family: SCoreMontserrat;
+}
+
+input {
+  width: 400px;
+  height: 28px;
+  border: 2px solid #111;
+  border-radius: 4px;
+  padding: 4px;
+}
+
+img {
+  cursor: pointer;
+}
+
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.todo-list-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 800px;
+  height: 90vh;
+  padding: 20px;
+  border: 2px solid #111;
+  border-radius: 4px;
+}
+
+.content {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: space-between;
+  vertical-align: center;
+  
+}
+
+.to-do-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 400px;
+  height: 200px;
+  overflow-y: scroll;
+  border: 2px solid #FF5A00;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.done-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 400px;
+  height: 200px;
+  overflow-y: scroll;
+  border: 2px solid  #0B70FE;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.close-button {
+  margin-bottom: 3px;
+}
+
+.buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.done-text {
+  text-decoration:line-through;
+}
