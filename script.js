@@ -8,6 +8,14 @@ const dones = document.querySelector('.done-list');
 const todoCountText = document.querySelector('.to-do-count');
 const doneCountText = document.querySelector('.done-count');
 
+const todoCount = () => {
+    todoCountText.innerHTML = `<span> (${todoList.length})</span>`;
+};
+
+const doneCount = () => {
+    doneCountText.innerHTML = `<span> (${doneList.length})</span>`;
+};
+
 const addTodoList = (e) => {
     e.preventDefault();
     const todoText = inputText.value;
@@ -26,14 +34,13 @@ const saveInDoneLocalStorage = (todoInfo) => {
     localStorage.setItem('done-list', JSON.stringify(todoInfo));
 };
 
-const createTodo = (todoText) => {
-    const todoId = new Date().getTime();
-    const todoInfo = {
-        todoId: todoId,
-        todoText: todoText,
-    };
-    todoList.push(todoInfo);
-    saveInTodoLocalStorage(todoList);
+const getDoneFromLocalStorage = () => {
+    localStorage.getItem('done-list');
+};
+
+const drawTodo = (todoInfo) => {
+    const todoText = todoInfo.todoText;
+    const todoId = todoInfo.todoId;
 
     const todoContent = document.createElement('div');
     todoContent.className = `content to-do-content-${todoId}`;
@@ -51,6 +58,28 @@ const createTodo = (todoText) => {
     />
     `;
     todos.appendChild(todoContent);
+};
+
+const todoItemsInLocalStorage = JSON.parse(localStorage.getItem('todo-list'));
+if (todoItemsInLocalStorage) {
+    todoItemsInLocalStorage.forEach((todoInfo) => {
+        drawTodo(todoInfo);
+        todoList.push(todoInfo);
+    });
+    todoCount();
+}
+
+const createTodo = (todoText) => {
+    const todoId = new Date().getTime();
+    const todoInfo = {
+        todoId: todoId,
+        todoText: todoText,
+    };
+
+    todoList.push(todoInfo);
+    saveInTodoLocalStorage(todoList);
+
+    drawTodo(todoInfo);
     todoCount();
 
     inputText.value = '';
@@ -76,6 +105,32 @@ const onClickDoneCloseButton = (todoId) => {
     doneCount();
 };
 
+const drawDone = (todoInfo) => {
+    const todoId = todoInfo.todoId;
+    const todoText = todoInfo.todoText;
+
+    const doneContent = document.createElement('div');
+    doneContent.className = `content done-content-${todoId}`;
+    doneContent.innerHTML = `
+    <span class="done-text">${todoText}</span>
+    <img
+        class="close-button-${todoId}"
+        onclick="onClickDoneCloseButton(${todoId})"
+        src='../vanilla-todo-16th/close_button.svg'
+    />
+    `;
+    dones.appendChild(doneContent);
+};
+
+const doneItemsInLocalStorage = JSON.parse(localStorage.getItem('done-list'));
+if (doneItemsInLocalStorage) {
+    doneItemsInLocalStorage.forEach((todoInfo) => {
+        drawDone(todoInfo);
+        doneList.push(todoInfo);
+    });
+    doneCount();
+}
+
 const onClickCheckButton = (todoId) => {
     let todoText;
     let todoInfo;
@@ -99,26 +154,9 @@ const onClickCheckButton = (todoId) => {
         todoCount();
         doneCount();
     }
-    const doneContent = document.createElement('div');
-    doneContent.className = `content done-content-${todoId}`;
-    doneContent.innerHTML = `
-    <span class="done-text">${todoInfo.todoText}</span>
-    <img
-        class="close-button-${todoId}"
-        onclick="onClickDoneCloseButton(${todoId})"
-        src='../vanilla-todo-16th/close_button.svg'
-    />
-    `;
-    dones.appendChild(doneContent);
+
+    drawDone(todoInfo);
     todoCount();
-};
-
-const todoCount = () => {
-    todoCountText.innerHTML = `<span> (${todoList.length})</span>`;
-};
-
-const doneCount = () => {
-    doneCountText.innerHTML = `<span> (${doneList.length})</span>`;
 };
 
 const init = () => {
