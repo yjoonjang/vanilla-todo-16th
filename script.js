@@ -46,16 +46,18 @@ const drawTodo = (todoInfo) => {
     todoContent.className = `content to-do-content-${todoId}`;
     todoContent.innerHTML = `
     <span>${todoText}</span> 
-    <img 
-        class="close-button-${todoId}" 
-        onclick="onClickTodoCloseButton(${todoId})" 
-        src='../vanilla-todo-16th/close_button.svg'  
-    />
-    <img
-        class="check-button-${todoId}"
-        onclick="onClickCheckButton(${todoId})"
-        src='../vanilla-todo-16th/Check.svg'
-    />
+    <div class="buttons">
+        <img 
+            class="close-button-${todoId}" 
+            onclick="onClickTodoCloseButton(${todoId})" 
+            src='../vanilla-todo-16th/icon/delete_button.svg'  
+        />
+        <img
+            class="check-button-${todoId}"
+            onclick="onClickCheckButton(${todoId})"
+            src='../vanilla-todo-16th/icon/check_button.svg'
+        />
+    </div>
     `;
     todos.appendChild(todoContent);
 };
@@ -78,20 +80,20 @@ const createTodo = (todoText) => {
 
 const onClickTodoCloseButton = (todoId) => {
     let closeButton = document.querySelector(`.close-button-${todoId}`);
-    if (closeButton.parentElement.className == `content to-do-content-${todoId}`) {
+    if (closeButton.parentNode.parentElement.className == `content to-do-content-${todoId}`) {
         todoList = todoList.filter((todoInfo) => todoInfo.todoId !== todoId);
         saveInTodoLocalStorage(todoList);
-        closeButton.parentElement.remove();
+        closeButton.parentNode.parentElement.remove();
     }
     todoCount();
 };
 
 const onClickDoneCloseButton = (todoId) => {
     let closeButton = document.querySelector(`.close-button-${todoId}`);
-    if (closeButton.parentElement.className == `content done-content-${todoId}`) {
+    if (closeButton.parentNode.parentElement.className == `content done-content-${todoId}`) {
         doneList = doneList.filter((todoInfo) => todoInfo.todoId !== todoId);
         saveInDoneLocalStorage(doneList);
-        closeButton.parentElement.remove();
+        closeButton.parentNode.parentElement.remove();
     }
     doneCount();
 };
@@ -104,11 +106,18 @@ const drawDone = (todoInfo) => {
     doneContent.className = `content done-content-${todoId}`;
     doneContent.innerHTML = `
     <span class="done-text">${todoText}</span>
-    <img
-        class="close-button-${todoId}"
-        onclick="onClickDoneCloseButton(${todoId})"
-        src='../vanilla-todo-16th/close_button.svg'
-    />
+    <div class="buttons">
+        <img
+            class="close-button-${todoId}"
+            onclick="onClickDoneCloseButton(${todoId})"
+            src='../vanilla-todo-16th/icon/delete_button.svg'
+        />
+        <img
+            class="error-button-${todoId}"
+            onclick="onClickErrorButton(${todoId})"
+            src='../vanilla-todo-16th/icon/error_button.svg'
+        />
+    </div>
     `;
     dones.appendChild(doneContent);
 };
@@ -134,9 +143,9 @@ if (doneItemsInLocalStorage) {
 const onClickCheckButton = (todoId) => {
     let todoText;
     let todoInfo;
-    let closeButton = document.querySelector(`.close-button-${todoId}`);
     let checkButton = document.querySelector(`.check-button-${todoId}`);
-    if (checkButton.parentElement.className == `content to-do-content-${todoId}`) {
+
+    if (checkButton.parentNode.parentElement.className == `content to-do-content-${todoId}`) {
         todoList.map((todoInfo) => {
             if (todoInfo.todoId == todoId) {
                 todoText = todoInfo.todoText;
@@ -149,14 +158,40 @@ const onClickCheckButton = (todoId) => {
         doneList.push(todoInfo);
         todoList = todoList.filter((todoInfo) => todoInfo.todoId !== todoId);
         saveInTodoLocalStorage(todoList);
-        closeButton.parentElement.remove();
+        checkButton.parentNode.parentElement.remove();
         saveInDoneLocalStorage(doneList);
         todoCount();
         doneCount();
     }
 
     drawDone(todoInfo);
-    todoCount();
+};
+
+const onClickErrorButton = (todoId) => {
+    let todoText;
+    let todoInfo;
+    let errorButton = document.querySelector(`.error-button-${todoId}`);
+
+    if (errorButton.parentNode.parentElement.className == `content done-content-${todoId}`) {
+        doneList.map((todoInfo) => {
+            if (todoInfo.todoId == todoId) {
+                todoText = todoInfo.todoText;
+            }
+        });
+        todoInfo = {
+            todoId: todoId,
+            todoText: todoText,
+        };
+        todoList.push(todoInfo);
+        doneList = doneList.filter((todoInfo) => todoInfo.todoId !== todoId);
+        saveInDoneLocalStorage(doneList);
+        errorButton.parentNode.parentElement.remove();
+        saveInTodoLocalStorage(todoList);
+        todoCount();
+        doneCount();
+    }
+
+    drawTodo(todoInfo);
 };
 
 const init = () => {
